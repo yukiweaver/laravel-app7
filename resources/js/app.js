@@ -1,10 +1,10 @@
 import './bootstrap'
 import Vue from 'vue'
-// import ArticleLike from './components/ArticleLike'
+import RestaurantSearch from './components/RestaurantSearch';
 
 const app = new Vue({
   el: '#app',
   components: {
-    // ArticleLike,
+    RestaurantSearch,
   }
 })
