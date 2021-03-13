@@ -4,6 +4,13 @@ namespace App\Consts;
 
 class RestaurantConst
 {
+    // 1: 300m
+    // 2: 500m
+    // 3: 1000m (初期値)
+    // 4: 2000m
+    // 5: 3000m
+    const range = 3;
+
     // ホットペッパーAPI 予算マスタAPIの結果を元に記述
     // http://webservice.recruit.co.jp/hotpepper/budget/v1/?key=[APIキー]
     const BUDGET_LIST = [

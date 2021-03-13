@@ -10,13 +10,11 @@
         <div class="card mt-3">
           <div class="card-body text-center">
             <h2 class="h3 card-title text-center mt-2">レストラン検索</h2>
-            <form method="post" action="">
-                <restaurant-search
-                :budget-list='@json(\RestaurantConst::BUDGET_LIST)'
-                :genre-list='@json(\RestaurantConst::GENRE_LIST)'
-                >
-                </restaurant-search>
-            </form>
+              <restaurant-search
+              :budget-list='@json(\RestaurantConst::BUDGET_LIST)'
+              :genre-list='@json(\RestaurantConst::GENRE_LIST)'
+              >
+              </restaurant-search>
           </div>
         </div>
       </div>
