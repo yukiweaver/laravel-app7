@@ -5,7 +5,7 @@ namespace App\Consts;
 class RestaurantConst
 {
 
-    const BASE_URL = 'http://webservice.recruit.co.jp/hotpepper/budget/v1/';
+    const BASE_URL = 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/';
 
     // 1: 300m
     // 2: 500m
@@ -13,6 +13,9 @@ class RestaurantConst
     // 4: 2000m
     // 5: 3000m
     const RANGE = 3;
+
+    // 取得数（最大100）
+    const COUNT = 30;
 
     // ホットペッパーAPI 予算マスタAPIの結果を元に記述
     // http://webservice.recruit.co.jp/hotpepper/budget/v1/?key=[APIキー]

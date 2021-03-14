@@ -9,8 +9,7 @@
       <restaurant-search
       :budget-list='@json(\RestaurantConst::BUDGET_LIST)'
       :genre-list='@json(\RestaurantConst::GENRE_LIST)'
-      :base-url='@json(\RestaurantConst::BASE_URL)'
-      :range='@json(\RestaurantConst::RANGE)'
+      search-path={{ route('restaurant.search') }}
       >
       </restaurant-search>
     </div>

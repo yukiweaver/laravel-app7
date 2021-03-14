@@ -16,3 +16,4 @@
 // });
 
 Route::get('/', 'RestaurantController@index')->name('restaurant.index');
+Route::get('/restaurant/search', 'RestaurantController@search')->name('restaurant.search');

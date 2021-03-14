@@ -59,7 +59,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <button @click="testMethod" class="btn btn-primary btn-block">検索する</button>
+                <button @click="clickSearch" class="btn btn-primary btn-block">検索する</button>
             </div>
         </div>
     </div>
@@ -78,15 +78,10 @@ export default {
             type: Object,
             default: {}
         },
-        // ベースURL
-        baseUrl: {
+        // なぜかhttpsになってしまう・・
+        searchPath: {
             type: String,
             default: ''
-        },
-        // 範囲
-        range: {
-            type: Number,
-            default: 0
         }
     },
     data() {
@@ -106,7 +101,7 @@ export default {
             /* Geolocation APIを利用できる環境向けの処理 */
             navigator.geolocation.getCurrentPosition(this.successCallback, this.errorCallback);
         } else {
-            // エラー処理
+            alert('位置情報が取得できません');
         }
 
     },
@@ -114,15 +109,27 @@ export default {
         //
     },
     methods: {
-        testMethod: function() {
-            console.log('testMethod');
+        async clickSearch() {
+            console.log('clickSearch');
+            let response = await axios.get('http://localhost/restaurant/search', {
+                params: {
+                    input_name: this.inputName,
+                    budget_selected: this.budgetSelected,
+                    genre_selected: this.genreSelected,
+                    check_lunch: this.checkLunch,
+                    check_wifi: this.checkWifi,
+                    latitude: this.latitude,
+                    longitude: this.longitude
+                }
+            });
+            console.log(response.data);
         },
         successCallback: function(position) {
             this.latitude = position.coords.latitude;
             this.longitude = position.coords.longitude;
         },
         errorCallback: function(error) {
-            console.log('位置情報取得に失敗しました');
+            alert('位置情報取得に失敗しました');
         }
     }
 }

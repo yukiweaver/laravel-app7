@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'hotpepper' => [
+        'key' => env('HOT_PEPPER_API_KEY'),
+    ],
+
 ];
