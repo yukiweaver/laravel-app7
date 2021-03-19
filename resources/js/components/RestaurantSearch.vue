@@ -78,7 +78,6 @@ export default {
             type: Object,
             default: {}
         },
-        // なぜかhttpsになってしまう・・
         searchPath: {
             type: String,
             default: ''
@@ -111,7 +110,7 @@ export default {
     methods: {
         async clickSearch() {
             console.log('clickSearch');
-            let response = await axios.get('http://localhost/restaurant/search', {
+            let response = await axios.get(this.searchPath, {
                 params: {
                     input_name: this.inputName,
                     budget_selected: this.budgetSelected,
