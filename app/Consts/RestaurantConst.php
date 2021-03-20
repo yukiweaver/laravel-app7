@@ -12,7 +12,7 @@ class RestaurantConst
     // 3: 1000m (初期値)
     // 4: 2000m
     // 5: 3000m
-    const RANGE = 3;
+    const RANGE = 4;
 
     // 取得数（最大100）
     const COUNT = 30;

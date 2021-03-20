@@ -62,6 +62,43 @@
                 <button @click="clickSearch" class="btn btn-primary btn-block">検索する</button>
             </div>
         </div>
+        <div>
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">List group item heading</h5>
+                    <small>3 days ago</small>
+                    </div>
+                    <p class="mb-1">
+                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
+                    varius blandit.
+                    </p>
+                    <small>Donec id elit non mi porta.</small>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">List group item heading</h5>
+                    <small class="text-muted">3 days ago</small>
+                    </div>
+                    <p class="mb-1">
+                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
+                    varius blandit.
+                    </p>
+                    <small class="text-muted">Donec id elit non mi porta.</small>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">List group item heading</h5>
+                    <small class="text-muted">3 days ago</small>
+                    </div>
+                    <p class="mb-1">
+                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
+                    varius blandit.
+                    </p>
+                    <small class="text-muted">Donec id elit non mi porta.</small>
+                </a>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -95,14 +132,13 @@ export default {
         }
     },
     // DOMの生成が完了した直後の処理
-    mounted() {
+    mounted: function() {
         if (navigator.geolocation) {
             /* Geolocation APIを利用できる環境向けの処理 */
             navigator.geolocation.getCurrentPosition(this.successCallback, this.errorCallback);
         } else {
             alert('位置情報が取得できません');
         }
-
     },
     computed: {
         //
@@ -110,7 +146,7 @@ export default {
     methods: {
         async clickSearch() {
             console.log('clickSearch');
-            let response = await axios.get(this.searchPath, {
+            await axios.get(this.searchPath, {
                 params: {
                     input_name: this.inputName,
                     budget_selected: this.budgetSelected,
@@ -120,8 +156,13 @@ export default {
                     latitude: this.latitude,
                     longitude: this.longitude
                 }
+            })
+            .then(function(response) {
+                console.log(response.data.results);
+            })
+            .catch(function(error) {
+                console.log(error);
             });
-            console.log(response.data);
         },
         successCallback: function(position) {
             this.latitude = position.coords.latitude;
