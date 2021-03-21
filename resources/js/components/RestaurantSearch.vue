@@ -62,42 +62,56 @@
                 <button @click="clickSearch" class="btn btn-primary btn-block">検索する</button>
             </div>
         </div>
-        <div>
-            <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                    <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">List group item heading</h5>
-                    <small>3 days ago</small>
-                    </div>
-                    <p class="mb-1">
-                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                    varius blandit.
-                    </p>
-                    <small>Donec id elit non mi porta.</small>
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">List group item heading</h5>
-                    <small class="text-muted">3 days ago</small>
-                    </div>
-                    <p class="mb-1">
-                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                    varius blandit.
-                    </p>
-                    <small class="text-muted">Donec id elit non mi porta.</small>
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">List group item heading</h5>
-                    <small class="text-muted">3 days ago</small>
-                    </div>
-                    <p class="mb-1">
-                    Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                    varius blandit.
-                    </p>
-                    <small class="text-muted">Donec id elit non mi porta.</small>
-                </a>
+        <br><br>
+        <div id="loader-bg">
+            <div id="loader">
+                <div class="d-flex align-items-center">
+                    <strong>Loading...</strong>
+                    <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+                </div>
             </div>
+            <!-- <div id="wrap">
+                ロード後に表示させたい内容
+            </div> -->
+        </div>
+        <div id="search-result">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" v-for="shop in shops" :key="shop.id">
+                    <div class="p-name-wrap">
+                        <p>
+                            <img :src="shop.logo_image">
+                        </p>
+                        <div class="p-name-content">
+                            <p class="p-category">{{ shop.genre.catch }}</p>
+                            <p class="p-catch">■ {{ shop.catch }} ■</p>
+                            <p class="p-name">{{ shop.name }}</p>
+                        </div>
+                    </div>
+                    <div class="p-content text-center">
+                        <div class="p-main-img">
+                            <p>
+                                <a :href="shop.urls.pc" target="_balank">
+                                    <img :src="shop.photo.pc.l" :alt="shop.name">
+                                    <br>
+                                    <span>店舗ページを見る</span>
+                                </a>
+                            </p>
+                        </div>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>予算</th>
+                                    <td>{{ shop.budget.average }}</td>
+                                </tr>
+                                <tr>
+                                    <th>オープン</th>
+                                    <td>{{ shop.open }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -129,6 +143,8 @@ export default {
             checkWifi: '0',
             latitude: '', // 緯度
             longitude: '', // 経度
+            shops: [], // 検索結果
+            count: 0, // 検索ヒット数
         }
     },
     // DOMの生成が完了した直後の処理
@@ -146,6 +162,12 @@ export default {
     methods: {
         async clickSearch() {
             console.log('clickSearch');
+
+            // ロードを表示
+            var h = $(window).height();
+            $('#wrap').css('display','none');
+            $('#loader-bg ,#loader').height(h).css('display','block');
+
             await axios.get(this.searchPath, {
                 params: {
                     input_name: this.inputName,
@@ -159,10 +181,20 @@ export default {
             })
             .then(function(response) {
                 console.log(response.data.results);
-            })
+
+                let searchResult = response.data.results;
+                this.count = searchResult.results_available;
+                this.shops = searchResult.shop;
+
+                // ロード非表示
+                $('#loader-bg').delay(900).fadeOut(800);
+                $('#loader').delay(600).fadeOut(300);
+                // $('#wrap').css('display', 'block');
+            }.bind(this)) // bindすることでaxios内でVueインスタンスを参照する
             .catch(function(error) {
                 console.log(error);
-            });
+                alert('検索に失敗しました');
+            }.bind(this));
         },
         successCallback: function(position) {
             this.latitude = position.coords.latitude;
@@ -176,5 +208,27 @@ export default {
 </script>
 
 <style>
-
+#loader-bg {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  background: rgba(0,0,0,0.7);
+  z-index: 1;
+}
+#loader {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin-top: -100px;
+  margin-left: -100px;
+  text-align: center;
+  color: #fff;
+  z-index: 2;
+}
 </style>
