@@ -75,6 +75,9 @@
             </div> -->
         </div>
         <div id="search-result">
+            <div v-if="isSearch" key="is_search">
+                <p>{{ count }}件がヒットしました。</p>
+            </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item" v-for="shop in shops" :key="shop.id">
                     <div class="p-name-wrap">
@@ -117,6 +120,10 @@
 </template>
 
 <script>
+// 課題
+// 検索項目を一つも入れない場合に、APIエラーになることがある
+// 店舗名検索で検索されない
+// loading時間で強制終了させる仕組みを作る
 export default {
     props: {
         // 予算リスト
@@ -145,6 +152,7 @@ export default {
             longitude: '', // 経度
             shops: [], // 検索結果
             count: 0, // 検索ヒット数
+            isSearch: false,
         }
     },
     // DOMの生成が完了した直後の処理
@@ -183,16 +191,28 @@ export default {
                 console.log(response.data.results);
 
                 let searchResult = response.data.results;
-                this.count = searchResult.results_available;
+                let code;
+                if (searchResult.error) {
+                    searchResult.error.forEach(function(value, index) {
+                        code = value['code'];
+                        console.error('code:' + code);
+                        console.error('message:' + value['message']);
+                    });
+                    alert('検索に失敗しました。\n' + 'code:' + code);
+                    // return; ここでreturnしていいように時間でloadingが強制終了する仕組みを作る
+                }
+                this.isSearch = true;
+                this.count = searchResult.results_returned;
                 this.shops = searchResult.shop;
 
                 // ロード非表示
                 $('#loader-bg').delay(900).fadeOut(800);
                 $('#loader').delay(600).fadeOut(300);
                 // $('#wrap').css('display', 'block');
-            }.bind(this)) // bindすることでaxios内でVueインスタンスを参照する
+
+            }.bind(this)) // bindすることでthen,catch内でVueインスタンスを参照する
             .catch(function(error) {
-                console.log(error);
+                console.error(error);
                 alert('検索に失敗しました');
             }.bind(this));
         },
