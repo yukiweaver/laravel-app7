@@ -7,7 +7,7 @@
                     <tbody>
                         <tr>
                             <th scope="row">店舗名</th>
-                            <td><input type="text" v-model="inputName" name="name_any" class="form-control"></td>
+                            <td><input type="text" v-model="name" name="name" class="form-control" placeholder="店名で部分一致"></td>
                         </tr>
                         <tr>
                             <th scope="row">予算</th>
@@ -70,9 +70,6 @@
                     <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
                 </div>
             </div>
-            <!-- <div id="wrap">
-                ロード後に表示させたい内容
-            </div> -->
         </div>
         <div id="search-result">
             <div v-if="isSearch" key="is_search">
@@ -122,8 +119,6 @@
 <script>
 // 課題
 // 検索項目を一つも入れない場合に、APIエラーになることがある
-// 店舗名検索で検索されない
-// loading時間で強制終了させる仕組みを作る
 export default {
     props: {
         // 予算リスト
@@ -143,7 +138,7 @@ export default {
     },
     data() {
         return {
-            inputName: '',
+            name: '',
             budgetSelected: '',
             genreSelected: '',
             checkLunch: '0',
@@ -173,12 +168,17 @@ export default {
 
             // ロードを表示
             var h = $(window).height();
-            $('#wrap').css('display','none');
             $('#loader-bg ,#loader').height(h).css('display','block');
+
+            // 時間で強制的にロード非表示
+            setTimeout(function() {
+                $('#loader-bg').delay(900).fadeOut(800);
+                $('#loader').delay(600).fadeOut(300);
+            }, 7000);
 
             await axios.get(this.searchPath, {
                 params: {
-                    input_name: this.inputName,
+                    name: this.name,
                     budget_selected: this.budgetSelected,
                     genre_selected: this.genreSelected,
                     check_lunch: this.checkLunch,
@@ -199,16 +199,14 @@ export default {
                         console.error('message:' + value['message']);
                     });
                     alert('検索に失敗しました。\n' + 'code:' + code);
-                    // return; ここでreturnしていいように時間でloadingが強制終了する仕組みを作る
+                    return;
                 }
                 this.isSearch = true;
                 this.count = searchResult.results_returned;
                 this.shops = searchResult.shop;
 
                 // ロード非表示
-                $('#loader-bg').delay(900).fadeOut(800);
-                $('#loader').delay(600).fadeOut(300);
-                // $('#wrap').css('display', 'block');
+                this.stopload();
 
             }.bind(this)) // bindすることでthen,catch内でVueインスタンスを参照する
             .catch(function(error) {
@@ -222,6 +220,10 @@ export default {
         },
         errorCallback: function(error) {
             alert('位置情報取得に失敗しました');
+        },
+        stopload() {
+            $('#loader-bg').delay(900).fadeOut(800);
+            $('#loader').delay(600).fadeOut(300);
         }
     }
 }
