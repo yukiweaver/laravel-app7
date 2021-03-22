@@ -199,6 +199,7 @@ export default {
                         console.error('message:' + value['message']);
                     });
                     alert('検索に失敗しました。\n' + 'code:' + code);
+                    this.stopload();
                     return;
                 }
                 this.isSearch = true;

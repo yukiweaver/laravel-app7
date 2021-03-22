@@ -28,7 +28,7 @@ class RestaurantController extends Controller
         try {
             $response = $client->request('GET', \RestaurantConst::BASE_URL, [
                 'query' => [
-                    'key' => config('services.hotpepper.ky'),
+                    'key' => config('services.hotpepper.key'),
                     'format' => 'json',
                     'name' => $data['name'],
                     'budget' => $data['budget_selected'],
