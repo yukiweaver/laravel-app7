@@ -123,6 +123,7 @@
 // revert用テストコメント追加
 // revert用テストコメント
 // cherry-pick用テストコメント追加
+// cherry-pick用テストコメント追加2
 export default {
     props: {
         // 予算リスト
