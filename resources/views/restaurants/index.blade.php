@@ -25,8 +25,6 @@ successCallback = function(position)
 errorCallback = function(error)
 {
     // console.log('エラー');
-    // テストコメント
-    // テストコメント4
 }
 
 if (navigator.geolocation) {
