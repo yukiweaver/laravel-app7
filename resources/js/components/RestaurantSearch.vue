@@ -6,8 +6,8 @@
                 <table class="table align-middle">
                     <tbody>
                         <tr>
-                            <th scope="row">店舗名</th>
-                            <td><input type="text" v-model="name" name="name" class="form-control" placeholder="店名で部分一致"></td>
+                            <th scope="row">キーワード</th>
+                            <td><input type="text" v-model="keyword" name="keyword" class="form-control" placeholder="店名、地名、駅名など"></td>
                         </tr>
                         <tr>
                             <th scope="row">予算</th>
@@ -139,7 +139,7 @@ export default {
     },
     data() {
         return {
-            name: '',
+            keyword: '',
             budgetSelected: '',
             genreSelected: '',
             checkLunch: '0',
@@ -179,7 +179,7 @@ export default {
 
             await axios.get(this.searchPath, {
                 params: {
-                    name: this.name,
+                    keyword: this.keyword,
                     budget_selected: this.budgetSelected,
                     genre_selected: this.genreSelected,
                     check_lunch: this.checkLunch,

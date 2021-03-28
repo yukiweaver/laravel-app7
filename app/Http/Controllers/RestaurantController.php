@@ -30,7 +30,7 @@ class RestaurantController extends Controller
                 'query' => [
                     'key' => config('services.hotpepper.key'),
                     'format' => 'json',
-                    'name' => $data['name'],
+                    'keyword' => $data['keyword'],
                     'budget' => $data['budget_selected'],
                     'genre' => $data['genre_selected'],
                     'lunch' => $data['check_lunch'],
