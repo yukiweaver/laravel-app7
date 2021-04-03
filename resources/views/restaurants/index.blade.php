@@ -12,6 +12,7 @@
       search-path={{ route('restaurant.search') }}
       >
       </restaurant-search>
+      <test></test>
     </div>
   </div>
 @endsection

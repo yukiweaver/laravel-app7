@@ -1,8 +1,8 @@
 import './bootstrap'
 import Vue from 'vue'
 import jQuery from 'jquery'
-import PerfectScrollbar from 'perfect-scrollbar'
 import RestaurantSearch from './components/RestaurantSearch'
+import Test from './components/Test'
 
 // Vueとjqueryを共存
 global.jquery = jQuery
@@ -13,5 +13,6 @@ const app = new Vue({
   el: '#app',
   components: {
     RestaurantSearch,
+    Test,
   }
 })
