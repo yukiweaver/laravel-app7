@@ -30,6 +30,9 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <!-- MDB core JavaScript -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
+
+  {{-- <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyCw2qHAMyUTyPcddKjCso0wLz77XaZLZ-o&sensor=false&v=3&language=ja" charset="utf-8"></script> --}}
+
 </body>
 
 </html>
