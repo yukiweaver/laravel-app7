@@ -3,7 +3,6 @@ import Vue from 'vue'
 import jQuery from 'jquery'
 import RestaurantSearch from './components/RestaurantSearch'
 import Test from './components/Test'
-import Test2 from './components/Test2'
 
 // Vueとjqueryを共存
 global.jquery = jQuery
@@ -15,6 +14,5 @@ const app = new Vue({
   components: {
     RestaurantSearch,
     Test,
-    Test2,
   }
 })
