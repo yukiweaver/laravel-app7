@@ -5,7 +5,16 @@ namespace App\Consts;
 class RestaurantConst
 {
 
+    // ホットペッパー
     const BASE_URL = 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/';
+
+    // GoogleDirection
+    const GOOGLE_DIRECTION_BASE_URL = 'https://maps.googleapis.com/maps/api/directions/json';
+
+    // driving - 車 ※デフォルト
+    // walking - 徒歩
+    // transit - 電車
+    const GOOGLE_DIRECTION_MODE = 'walking';
 
     // 1: 300m
     // 2: 500m

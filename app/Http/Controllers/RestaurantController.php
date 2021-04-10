@@ -22,6 +22,15 @@ class RestaurantController extends Controller
         return $searchResult;
     }
 
+    /**
+     * 現在地から目的地までの情報を返す
+     */
+    public function direction(Request $request)
+    {
+        $directionResult = $this->directionRestaurant($request->all());
+        return $directionResult;
+    }
+
     private function searchRestaurant(array $data)
     {
         $client = new Client();
@@ -50,7 +59,24 @@ class RestaurantController extends Controller
                 'message' => $response->getMessage(),
             ];
         }
+    }
 
+    private function directionRestaurant(array $data)
+    {
+        $client = new Client();
+        try {
+            $response = $client->request('GET', \RestaurantConst::GOOGLE_DIRECTION_BASE_URL, [
+                'query' => [
+                    'key' => config('services.google_map.key'),
+                    'origin' => "$data[start_lat],$data[start_lng]",
+                    'destination' => "$data[end_lat],$data[end_lng]",
+                    'mode' => \RestaurantConst::GOOGLE_DIRECTION_MODE,
+                ]
+            ]);
+            return $response->getBody()->getContents();
+        } catch (ClientException $e) {
+            $response = $e->getReponse;
+        }
     }
 
     // private function searchRestaurant()

@@ -10,9 +10,10 @@
       :budget-list='@json(\RestaurantConst::BUDGET_LIST)'
       :genre-list='@json(\RestaurantConst::GENRE_LIST)'
       search-path={{ route('restaurant.search') }}
+      direction-path={{ route('restaurant.direction') }}
       >
       </restaurant-search>
-      <test></test>
+      {{-- <test></test> --}}
       {{-- <test2></test2> --}}
     </div>
   </div>

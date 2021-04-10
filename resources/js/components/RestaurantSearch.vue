@@ -123,6 +123,7 @@
 // メモ
 // ルート案内はリンクに任せることにする。webでは現在地の矢印を出すのが困難っぽい
 // 表示時点でdirectionAPI使って、距離と時間は表示するようにする。通信重くはなる
+// localhostをスマホで確認できるっぽい。タリーズwifiでは無理だったが・・
 export default {
     props: {
         // 予算リスト
@@ -136,6 +137,10 @@ export default {
             default: {}
         },
         searchPath: {
+            type: String,
+            default: ''
+        },
+        directionPath: {
             type: String,
             default: ''
         }
@@ -206,6 +211,32 @@ export default {
                     this.stopload();
                     return;
                 }
+                // this.isSearch = true;
+                // this.count = searchResult.results_returned;
+                // this.shops = searchResult.shop;
+
+                if (searchResult.shop.length) {
+                    let directionPath = this.directionPath;
+                    let startLat = this.latitude;
+                    let startLon = this.longitude;
+                    searchResult.shop.forEach(function(value, index) {
+                        await axios.get(directionPath, {
+                            params: {
+                                start_lat: startLat,
+                                start_lng: startLon,
+                                end_lat: value['lat'],
+                                end_lng: value['lng']
+                            }
+                        })
+                        .then(function(response) {
+                            console.log(response.data);
+                        }.bind(this))
+                        .catch(function(error) {
+                            console.log(error);
+                        }.bind(this))
+                    });
+                }
+
                 this.isSearch = true;
                 this.count = searchResult.results_returned;
                 this.shops = searchResult.shop;

@@ -17,3 +17,4 @@
 
 Route::get('/', 'RestaurantController@index')->name('restaurant.index');
 Route::get('/restaurant/search', 'RestaurantController@search')->name('restaurant.search');
+Route::get('/restaurant/direction', 'RestaurantController@direction')->name('restaurant.direction');
