@@ -76,6 +76,11 @@ class RestaurantController extends Controller
             return $response->getBody()->getContents();
         } catch (ClientException $e) {
             $response = $e->getReponse;
+            return [
+                'status' => 'ng',
+                'status_code' => $response->getStatusCode(),
+                'message' => $response->getMessage(),
+            ];
         }
     }
 

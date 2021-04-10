@@ -183,7 +183,7 @@ export default {
             setTimeout(function() {
                 $('#loader-bg').delay(900).fadeOut(800);
                 $('#loader').delay(600).fadeOut(300);
-            }, 7000);
+            }, 30000);
 
             await axios.get(this.searchPath, {
                 params: {
@@ -211,43 +211,54 @@ export default {
                     this.stopload();
                     return;
                 }
-                // this.isSearch = true;
-                // this.count = searchResult.results_returned;
-                // this.shops = searchResult.shop;
 
                 if (searchResult.shop.length) {
-                    let directionPath = this.directionPath;
-                    let startLat = this.latitude;
-                    let startLon = this.longitude;
-                    searchResult.shop.forEach(function(value, index) {
-                        await axios.get(directionPath, {
-                            params: {
-                                start_lat: startLat,
-                                start_lng: startLon,
-                                end_lat: value['lat'],
-                                end_lng: value['lng']
-                            }
-                        })
-                        .then(function(response) {
-                            console.log(response.data);
-                        }.bind(this))
-                        .catch(function(error) {
-                            console.log(error);
-                        }.bind(this))
-                    });
+                    (async () => {
+                        for(let value of searchResult.shop) {
+                            await axios.get(this.directionPath, {
+                                params: {
+                                    start_lat: this.latitude,
+                                    start_lng: this.longitude,
+                                    end_lat: value['lat'],
+                                    end_lng: value['lng']
+                                }
+                            })
+                            .then(function(response) {
+                                console.log(response.data.routes[0]);
+                                let directionResult = response.data.routes;
+                                if (!directionResult.length) {
+                                    throw 'Google Directionの結果が空です';
+                                }
+                                // this.shopsには、routes情報を格納した配列データを代入する
+                            }.bind(this))
+                            .catch(function(error) {
+                                alert('Google Direction APIでエラー');
+                                console.error(error);
+                            }.bind(this))
+                        }
+                        this.isSearch = true;
+                        this.count = searchResult.results_returned;
+                        this.shops = searchResult.shop;
+
+                        // ロード非表示
+                        this.stopload();
+                    })();
+                } else {
+                    this.isSearch = true;
+                    this.count = searchResult.results_returned;
+                    this.shops = searchResult.shop;
+
+                    // ロード非表示
+                    this.stopload();
                 }
-
-                this.isSearch = true;
-                this.count = searchResult.results_returned;
-                this.shops = searchResult.shop;
-
-                // ロード非表示
-                this.stopload();
 
             }.bind(this)) // bindすることでthen,catch内でVueインスタンスを参照する
             .catch(function(error) {
                 console.error(error);
                 alert('検索に失敗しました');
+
+                // ロード非表示
+                this.stopload();
             }.bind(this));
         },
         successCallback: function(position) {
@@ -255,11 +266,18 @@ export default {
             this.longitude = position.coords.longitude;
         },
         errorCallback: function(error) {
-            alert('位置情報取得に失敗しました');
+            alert('位置情報取得を許可してください');
         },
         stopload() {
             $('#loader-bg').delay(900).fadeOut(800);
             $('#loader').delay(600).fadeOut(300);
+        },
+        sleep(time) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve();
+                }, time);
+            });
         }
     }
 }
