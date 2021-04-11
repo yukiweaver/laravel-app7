@@ -107,6 +107,18 @@
                                     <th>オープン</th>
                                     <td>{{ shop.open }}</td>
                                 </tr>
+                                <tr>
+                                    <th>距離</th>
+                                    <td>{{ shop.distance.text }}</td>
+                                </tr>
+                                <tr>
+                                    <th>時間（徒歩）</th>
+                                    <td>{{ shop.time.text }}</td>
+                                </tr>
+                                <tr>
+                                    <th>マップ</th>
+                                    <td><a :href="shop.map_link" target="_balank">ここに行く</a></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -143,7 +155,11 @@ export default {
         directionPath: {
             type: String,
             default: ''
-        }
+        },
+        travelMode: {
+            type: String,
+            default: ''
+        },
     },
     data() {
         return {
@@ -214,7 +230,12 @@ export default {
 
                 if (searchResult.shop.length) {
                     (async () => {
-                        for(let value of searchResult.shop) {
+                        let i = 0;
+                        let shops = [];
+                        for (let value of searchResult.shop) {
+                            shops[i] = value;
+                            
+                            // ルート情報取得
                             await axios.get(this.directionPath, {
                                 params: {
                                     start_lat: this.latitude,
@@ -224,21 +245,34 @@ export default {
                                 }
                             })
                             .then(function(response) {
-                                console.log(response.data.routes[0]);
+                                console.log(response.data.routes);
                                 let directionResult = response.data.routes;
                                 if (!directionResult.length) {
                                     throw 'Google Directionの結果が空です';
                                 }
-                                // this.shopsには、routes情報を格納した配列データを代入する
+                                for (let vals of directionResult) {
+                                    for (let val of vals['legs']) {
+                                        shops[i]['distance'] = val['distance'];
+                                        shops[i]['time'] = val['duration'];
+                                        shops[i]['map_link'] = this.createMapLink(
+                                            this.latitude,
+                                            this.longitude,
+                                            value['name'],
+                                            this.travelMode
+                                        );
+                                    }
+                                }
                             }.bind(this))
                             .catch(function(error) {
                                 alert('Google Direction APIでエラー');
                                 console.error(error);
                             }.bind(this))
+                            i ++;
                         }
+                        console.log(shops);
                         this.isSearch = true;
                         this.count = searchResult.results_returned;
-                        this.shops = searchResult.shop;
+                        this.shops = shops;
 
                         // ロード非表示
                         this.stopload();
@@ -272,12 +306,8 @@ export default {
             $('#loader-bg').delay(900).fadeOut(800);
             $('#loader').delay(600).fadeOut(300);
         },
-        sleep(time) {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve();
-                }, time);
-            });
+        createMapLink(startLat, startLng, restaurantName, travelMode='walking') {
+            return `https://www.google.com/maps/dir/?api=1&origin=${startLat},${startLng}&destination=${restaurantName}&travelmode=${travelMode}`;
         }
     }
 }

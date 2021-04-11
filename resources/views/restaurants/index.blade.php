@@ -11,10 +11,10 @@
       :genre-list='@json(\RestaurantConst::GENRE_LIST)'
       search-path={{ route('restaurant.search') }}
       direction-path={{ route('restaurant.direction') }}
+      :travel-mode='@json(\RestaurantConst::GOOGLE_DIRECTION_MODE)'
       >
       </restaurant-search>
       {{-- <test></test> --}}
-      {{-- <test2></test2> --}}
     </div>
   </div>
 @endsection
